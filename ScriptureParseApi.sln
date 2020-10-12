@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30524.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptureParseApi", "ScriptureParseApi\ScriptureParseApi.csproj", "{BCF42DF4-293F-49E5-8980-6DAB501BED69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCF42DF4-293F-49E5-8980-6DAB501BED69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF42DF4-293F-49E5-8980-6DAB501BED69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF42DF4-293F-49E5-8980-6DAB501BED69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF42DF4-293F-49E5-8980-6DAB501BED69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5EAB366-668E-4B77-B1BC-3ACCD50BCFDB}
+	EndGlobalSection
+EndGlobal
