@@ -11,6 +11,7 @@ namespace ScriptureParseApi.Controllers
         [HttpGet("{scripture}")]
         public IActionResult Get(string scripture)
         {
+            //Test Push
             if (scripture.NullOrEmpty())
                 return NotFound();
 
