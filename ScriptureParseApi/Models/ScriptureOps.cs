@@ -11,40 +11,44 @@ namespace ScriptureParseApi.Models
         {
             var scriptures = new List<Scripture>();
 
-            var scriptureSplits = unparsedScriptures.Replace(", ", ";").Split(';');
+            var scriptureSplits = unparsedScriptures.Replace(", ", ";").Replace(",", ";").Split(';');
 
             foreach (var scripture in scriptureSplits)
             {
                 var trimmedScripture = scripture.Trim();
 
-                var hasDangler = trimmedScripture.Split(',').Length > 1;
-
-                var dangler = (hasDangler) ? trimmedScripture.Split(',')[1] : null;
-
                 var cleanedScripture = trimmedScripture.Split(',')[0];
 
                 var passage = new Scripture();
+
+                if (cleanedScripture.Replace("-", string.Empty).Replace(":", string.Empty).IsNumeric()) //This is either a dangling verse, or another chapter
+                {
+                    if (!cleanedScripture.Contains(":"))//This is just a verse coupling
+                    {
+                        var chapter = (scriptures.Last().EndChapter != null) ? scriptures.Last().EndChapter : scriptures.Last().StartChapter;
+                        if (cleanedScripture.Contains("-"))//This is a verse range
+                        {                            
+                            var verses = cleanedScripture.Split("-");
+                            cleanedScripture = $"{scriptures.Last().Book} {chapter}:{verses[0]}-{chapter}:{verses[1]}";
+                        }
+                        else
+                        {
+                            cleanedScripture = $"{scriptures.Last().Book} {chapter}:{cleanedScripture}";
+                        }
+                    }
+                }
+
                 var bookName = GetBookName(cleanedScripture);
-                passage.Book = (bookName == string.Empty) ? scriptures.Last().Book : bookName;
+                passage.Book = (bookName.NullOrEmpty()) ? scriptures.Last().Book : bookName;
                 cleanedScripture = cleanedScripture.Replace(passage.Book, "").Trim();
                 passage.StartChapter = GetStartChapter(cleanedScripture);
                 passage.StartVerse = GetStartVerse(cleanedScripture);
                 passage.EndChapter = GetEndChapter(cleanedScripture);
                 passage.EndVerse = GetEndVerse(cleanedScripture);
 
+                passage.EndChapter = (passage.EndChapter == passage.StartChapter) ? null : passage.EndChapter;
+
                 scriptures.Add(passage);
-
-                if (hasDangler)
-                {
-                    var danglerPassage = new Scripture(passage);
-
-                    danglerPassage.StartChapter = (passage.EndChapter != null) ? (int)passage.EndChapter : passage.StartChapter;
-                    danglerPassage.StartVerse = Convert.ToInt32(dangler);
-                    danglerPassage.EndChapter = null;
-                    danglerPassage.EndVerse = null;
-
-                    scriptures.Add(danglerPassage);
-                }
             }
 
             return scriptures;
@@ -53,6 +57,9 @@ namespace ScriptureParseApi.Models
         private static string GetBookName(string scripture)
         {
             var spaces = scripture.Split(' ');
+
+            if (spaces.IsNumeric())
+                return null;
 
             if (int.TryParse(spaces[0], out _)) //1 Cor; 1 Pet etc
             {
