@@ -33,7 +33,14 @@ namespace ScriptureParseApi.Models
                         }
                         else
                         {
-                            cleanedScripture = $"{scriptures.Last().Book} {chapter}:{cleanedScripture}";
+                            if (scriptures.Last().StartVerse == null && scriptures.Last().EndVerse == null) //Previous entry was chapter sans verses
+                            {
+                                cleanedScripture = $"{scriptures.Last().Book} {cleanedScripture}";
+                            }
+                            else
+                            {
+                                cleanedScripture = $"{scriptures.Last().Book} {chapter}:{cleanedScripture}";
+                            }
                         }
                     }
                 }
